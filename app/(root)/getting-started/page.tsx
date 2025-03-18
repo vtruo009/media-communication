@@ -4,7 +4,7 @@ import { SearchCheck, MapPinned, PhoneCall } from 'lucide-react';
 const GettingStarted = () => {
 	const instructions = [
 		{
-			label: 'Choose an issue you case about',
+			label: 'Choose an issue you care about',
 			icon: <SearchCheck className='instruction-icon' />,
 			text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ut erat neque. Duis id sapien a lorem consectetur porta id in quam. Nulla quis commodo lorem. Donec enim nisl, tempor quis luctus a, condimentum in nisl. Cras maximus erat id velit congue facilisis. Integer et nulla vel tellus laoreet fringilla.',
 		},
