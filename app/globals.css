@@ -9,3 +9,10 @@
 	--font-open-sans: 'Open Sans', sans-serif;
 	--font-geist-mono: 'Geist Mono', monospace;
 }
+
+.instruction-icon {
+	width: 6rem;
+	height: auto;
+	stroke: #4ea5d9;
+	stroke-width: 2px;
+}
