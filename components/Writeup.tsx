@@ -7,6 +7,8 @@ interface WriteupProps {
 	thumbnail: string;
 	icon?: React.ReactElement;
 	title: string;
+	author: string;
+	categories: string[];
 }
 
 const Writeup = (writeup: WriteupProps) => {
