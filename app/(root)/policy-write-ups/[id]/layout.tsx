@@ -6,12 +6,12 @@ import { ArrowUpRight } from 'lucide-react';
 
 const OverviewLayout = ({ children }: { children: React.ReactNode }) => {
 	return (
-		<div className='flex flex-row w-full py-20 px-52 gap-x-12'>
+		<div className='flex flex-row w-full py-20 px-52 gap-x-14'>
 			<aside
 				id='most-recent'
-				className='hidden sm:w-[300px] h-auto sm:flex flex-col shrink-0'
+				className='sticky top-0 overflow-y-auto w-1/4 flex flex-col shrink-0 xs:hidden '
 			>
-				<h2 className='font-extrabold text-xl py-4 border-b-2 border-gray-200'>
+				<h2 className='leading-none font-extrabold text-xl pb-3 border-b-4 border-gray-200'>
 					Most Recent
 				</h2>
 				<ul className='mb-4'>
@@ -29,7 +29,7 @@ const OverviewLayout = ({ children }: { children: React.ReactNode }) => {
 					<ArrowUpRight className='w-4 h-4' />
 				</Link>
 			</aside>
-			<main>{children}</main>
+			<main className='w-3/4 min-h-screen overflow-y-auto'>{children}</main>
 		</div>
 	);
 };
