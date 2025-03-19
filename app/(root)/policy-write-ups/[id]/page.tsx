@@ -18,7 +18,7 @@ const Overview = async ({ params }: { params: Promise<{ id: string }> }) => {
 	const writeup = writeups.find((writeup) => writeup.id == Number(id));
 
 	return (
-		<div>
+		<div className='flex flex-col'>
 			<h1>{writeup?.title}</h1>
 		</div>
 	);
