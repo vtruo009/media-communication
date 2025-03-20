@@ -3,19 +3,19 @@ import Link from 'next/link';
 
 interface WriteupProps {
 	id: string | number;
-	date: Date;
-	url: string;
+	published: Date;
 	thumbnail: string;
-	icon: React.ReactElement;
+	icon?: React.ReactElement;
 	title: string;
-	shortDesc: string;
+	author: string;
+	categories: string[];
 }
 
 const Writeup = (writeup: WriteupProps) => {
 	return (
 		<Link
 			id='write-up'
-			href={writeup.url}
+			href={`policy-write-ups/${writeup.id}`}
 			className='flex flex-row h-40 border-b-2 border-gray-300 mb-4 last:mb-0'
 		>
 			<div
@@ -30,8 +30,11 @@ const Writeup = (writeup: WriteupProps) => {
 			</div>
 			<div
 				id='write-up-details'
-				className='flex flex-col justify-center items-start py-4 px-10 gap-y-4'
+				className='flex flex-col justify-start items-start py-4 px-10 gap-y-4'
 			>
+				<p id='short-desc' className='text-xs text-gray-500'>
+					{writeup.published.toDateString()}
+				</p>
 				<div
 					id='title'
 					className='flex flex-row w-full justify-start items-center gap-x-4'
@@ -39,9 +42,6 @@ const Writeup = (writeup: WriteupProps) => {
 					{writeup.icon}
 					<h3 className='font-bold text-base'>{writeup.title}</h3>
 				</div>
-				<p id='short-desc' className='text-gray-500'>
-					{writeup.shortDesc}
-				</p>
 			</div>
 		</Link>
 	);
