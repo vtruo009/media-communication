@@ -1,4 +1,5 @@
 import Categories from '@/components/Categories';
+import ContactTab from '@/components/ContactTab';
 import { writeups } from '@/lib/constants';
 
 // TODO: Create interface.ts
@@ -34,7 +35,7 @@ const Overview = async ({ params }: { params: Promise<{ id: string }> }) => {
 					<Categories categories={writeup?.categories ?? []} />
 				</div>
 				<p className='py-4'>{writeup?.bulletOverview}</p>
-				{/* contact component */}
+				<ContactTab />
 			</div>
 		</>
 	);
