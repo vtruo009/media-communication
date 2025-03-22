@@ -2,18 +2,6 @@ import Categories from '@/components/Categories';
 import ContactTab from '@/components/ContactTab';
 import { writeups } from '@/lib/constants';
 
-// TODO: Create interface.ts
-interface WriteupProps {
-	id: string | number;
-	published: Date;
-	thumbnail: string;
-	icon: React.ReactElement;
-	title: string;
-	author: string;
-	overview: string;
-	categories: string[];
-}
-
 const Overview = async ({ params }: { params: Promise<{ id: string }> }) => {
 	const { id } = await params;
 
@@ -34,7 +22,7 @@ const Overview = async ({ params }: { params: Promise<{ id: string }> }) => {
 				<div className='text-center py-4 border-y-2 border-gray-300'>
 					<Categories categories={writeup?.categories ?? []} />
 				</div>
-				<p className='py-4'>{writeup?.bulletOverview}</p>
+				<p className='py-4'>{writeup?.content}</p>
 				<ContactTab />
 			</div>
 		</>

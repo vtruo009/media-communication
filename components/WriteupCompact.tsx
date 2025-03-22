@@ -1,11 +1,16 @@
+import { WriteUp } from '@/lib/mixin';
 import Link from 'next/link';
 
-const WriteupCompact = (props: any) => {
+const WriteupCompact = (props: WriteUp) => {
 	return (
 		<Link href={`${props.id}`}>
 			<div className='flex flex-row justify-center items-center overflow-y-auto gap-x-4 py-3 border-b-2 border-gray-200'>
 				<div className='w-[35%]'>
-					<img src={props.thumbnail} className='object-contain w-full h-auto' />
+					<img
+						src={props.thumbnail}
+						alt='write-up-thumbnail'
+						className='object-contain w-full h-auto'
+					/>
 				</div>
 				<div className='w-[65%] leading-none'>
 					<span className='text-xs text-gray-500'>

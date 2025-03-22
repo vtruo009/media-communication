@@ -1,17 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
+import { WriteUp } from '@/lib/mixin';
 
-interface WriteupProps {
-	id: string | number;
-	published: Date;
-	thumbnail: string;
-	icon?: React.ReactElement;
-	title: string;
-	author: string;
-	categories: string[];
-}
-
-const Writeup = (writeup: WriteupProps) => {
+const Writeup = (writeup: WriteUp) => {
 	return (
 		<Link
 			id='write-up'
@@ -23,7 +14,7 @@ const Writeup = (writeup: WriteupProps) => {
 				className='w-[250px] flex shrink-0 justify-center items-center p-2'
 			>
 				<img
-					src={writeup.thumbnail}
+					src='/pusd.png'
 					alt='write-up-thumbnail'
 					className='object-contain w-full h-full'
 				/>
