@@ -10,7 +10,7 @@ const Overview = async ({ params }: { params: Promise<{ id: string }> }) => {
 	const writeup = writeups.find((writeup) => writeup.id == Number(id));
 
 	return (
-		<>
+		<article>
 			<div className='flex justify-between mb-2 text-blue-900 font-semibold'>
 				<span>{writeup?.author}</span>
 				<span>{writeup?.published.toDateString()}</span>
@@ -25,7 +25,7 @@ const Overview = async ({ params }: { params: Promise<{ id: string }> }) => {
 				<p className='py-4'>{writeup?.content}</p>
 				<ContactTab />
 			</div>
-		</>
+		</article>
 	);
 };
 
