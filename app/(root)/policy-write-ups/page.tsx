@@ -1,16 +1,21 @@
+'use client';
+
 import Writeup from '@/components/Writeup';
 import { writeups } from '@/lib/constants';
+import { useState } from 'react';
+import { WriteUp } from '@/lib/mixin';
+import Search from '@/components/Search';
 
 const PolicyWriteups = () => {
+	const [filteredWriteups, setFilteredWriteups] = useState<WriteUp[]>(writeups);
+
 	return (
-		<>
-			<div className='rounded-xl border-2 border-black'></div>
-			<div className='py-12 px-52'>
-				{writeups.map((writeup) => (
-					<Writeup key={writeup.id} {...writeup} />
-				))}
-			</div>
-		</>
+		<div className='py-12 px-52'>
+			<Search writeups={writeups} setFilteredWriteups={setFilteredWriteups} />
+			{filteredWriteups.map((writeup) => (
+				<Writeup key={writeup.id} {...writeup} />
+			))}
+		</div>
 	);
 };
 
