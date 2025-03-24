@@ -27,6 +27,7 @@ const Search = ({
 		});
 		setFilteredWriteups(filtered);
 	};
+
 	return (
 		<div className='flex flex-row items-center justify-evenly gap-x-4 mb-8'>
 			<div className='w-[85%] flex flex-row items-center border-2 rounded-lg p-2 gap-x-2'>
