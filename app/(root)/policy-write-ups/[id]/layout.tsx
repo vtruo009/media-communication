@@ -1,19 +1,11 @@
 import Link from 'next/link';
 import React from 'react';
-// import { writeups } from '@/lib/constants';
 import WriteupCompact from '@/components/WriteupCompact';
 import { ArrowUpRight } from 'lucide-react';
 import { getMostRecent } from '@/lib/database';
-import { WriteUp } from '@/lib/mixin';
 import { transformData } from '@/lib/utils';
 
-const OverviewLayout = async ({
-	children,
-	params,
-}: {
-	children: React.ReactNode;
-	params: { id: string };
-}) => {
+const OverviewLayout = async ({ children }: { children: React.ReactNode }) => {
 	const data = await getMostRecent();
 	const mostRecentWriteups = transformData(data);
 

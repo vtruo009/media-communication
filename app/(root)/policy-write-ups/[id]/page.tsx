@@ -1,11 +1,6 @@
 import Categories from '@/components/Categories';
 import ContactTab from '@/components/ContactTab';
-import { writeups } from '@/lib/constants';
 import { getWriteup } from '@/lib/database';
-import { WriteUp } from '@/lib/mixin';
-import { neon } from '@neondatabase/serverless';
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-import { notFound } from 'next/navigation';
 
 const Overview = async ({ params }: { params: Promise<{ id: string }> }) => {
 	const { id } = await params;
@@ -40,20 +35,5 @@ const Overview = async ({ params }: { params: Promise<{ id: string }> }) => {
 		);
 	}
 };
-
-// export const getServerSideProps = async (
-// 	context: GetServerSidePropsContext
-// ) => {
-// 	const { id } = context.params as { id: string };
-// 	const sql = neon(process.env.DATABASE_URL || '');
-
-// 	try {
-// 		const res = await sql`SELECT * from write-Ups WHERE id=${id}`;
-// 		const writeup: WriteUp = await res[0].json();
-// 		return { props: { writeup } };
-// 	} catch (error) {
-// 		return { notFound: true };
-// 	}
-// };
 
 export default Overview;

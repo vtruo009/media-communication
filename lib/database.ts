@@ -6,7 +6,7 @@ export const getAllWriteups = async () => {
 	try {
 		return await sql`SELECT * FROM write_ups`;
 	} catch (error) {
-		throw new Error('Error fetching all write-ups');
+		throw new Error(`Error fetching all write-ups: ${error}`);
 	}
 };
 
@@ -18,7 +18,7 @@ export const getWriteup = async (id: string) => {
 
 		return result[0];
 	} catch (error) {
-		throw new Error(`Error fetching write-up with id ${id}`);
+		throw new Error(`Error fetching write-up with id ${id}: ${error}`);
 	}
 };
 
@@ -29,8 +29,6 @@ export const getMostRecent = async () => {
 
 		return result;
 	} catch (error) {
-		throw new Error(
-			`Error fetching most recent write-ups: ${(error as Error).message}`
-		);
+		throw new Error(`Error fetching most recent write-ups: ${error}`);
 	}
 };
