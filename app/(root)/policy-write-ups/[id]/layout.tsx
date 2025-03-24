@@ -3,11 +3,10 @@ import React from 'react';
 import WriteupCompact from '@/components/WriteupCompact';
 import { ArrowUpRight } from 'lucide-react';
 import { getMostRecent } from '@/lib/database';
-import { transformData } from '@/lib/utils';
+import { WriteUp } from '@/lib/mixin';
 
 const OverviewLayout = async ({ children }: { children: React.ReactNode }) => {
-	const data = await getMostRecent();
-	const mostRecentWriteups = transformData(data);
+	const mostRecentWriteups = (await getMostRecent()) as WriteUp[];
 
 	return (
 		<div className='flex flex-row w-full py-[5%] px-[10%] gap-x-14'>

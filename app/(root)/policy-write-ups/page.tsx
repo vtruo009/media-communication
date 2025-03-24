@@ -1,13 +1,10 @@
-'use client';
-
 import Writeup from '@/components/Writeup';
 import { getAllWriteups } from '@/lib/database';
-import { transformData } from '@/lib/utils';
+import { WriteUp } from '@/lib/mixin';
 
 const PolicyWriteups = async () => {
 	try {
-		const data = await getAllWriteups();
-		const writeups = transformData(data);
+		const writeups = (await getAllWriteups()) as WriteUp[];
 
 		return (
 			<div className='py-12 px-52'>
