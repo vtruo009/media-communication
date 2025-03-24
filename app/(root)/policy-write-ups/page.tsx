@@ -1,3 +1,5 @@
+'use client';
+
 import Writeup from '@/components/Writeup';
 import { getAllWriteups } from '@/lib/database';
 import { transformData } from '@/lib/utils';
