@@ -1,13 +1,11 @@
 import React from 'react';
+import EmailSubscription from './EmailSubscription';
 
 const Footer = () => {
 	return (
-		<footer className='w-full h-[50vh] flex flex-row border-t-2'>
-			<div className='w-2/3'>This is the left side of the footer</div>
-			<div className='w-1/3 bg-[#EDE6F2]'>
-				This is the right side of the footer where the contact form should be
-				<div className='w-full border rounded-xl'>Contact form</div>
-			</div>
+		<footer className='w-full h-[25vh] min-2xl:h-[15vh] flex flex-row border-t-2'>
+			<div className='w-1/2'>This is the left side of the footer</div>
+			<EmailSubscription />
 		</footer>
 	);
 };
