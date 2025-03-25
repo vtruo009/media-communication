@@ -5,7 +5,7 @@ const Header = () => {
 	const tabs = [
 		{ title: 'What We Do', url: '/what-we-do' },
 		{ title: 'Getting Started', url: '/getting-started' },
-		{ title: 'Policy Write-ups', url: '/policy-write-ups' },
+		{ title: 'Policy Write-ups', url: '/policy-write-ups?page=1' },
 		{ title: 'Videos', url: '/videos' },
 		{ title: 'How to Get Involved', url: '/how-to-get-involved' },
 	];
