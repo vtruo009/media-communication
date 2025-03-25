@@ -22,8 +22,12 @@ const EmailSubscription = () => {
 		} else {
 			try {
 				await addUser(email);
-				toast.success('You will receive weekly updates/announcements!');
+				toast.success(
+					'You have successfully subscribed to weekly updates/announcements!'
+				);
+				setEmail('');
 			} catch (error) {
+				console.error(error);
 				toast.error('This email is already subscribed.');
 			}
 		}
