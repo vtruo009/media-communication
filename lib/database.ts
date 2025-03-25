@@ -1,7 +1,10 @@
+'use server';
+
 import { neon } from '@neondatabase/serverless';
 
 const sql = neon(process.env.DATABASE_URL || '');
 
+/************************************** Write-ups **************************************/
 export const getAllWriteups = async () => {
 	try {
 		return await sql`SELECT * FROM write_ups`;
@@ -30,5 +33,14 @@ export const getMostRecent = async () => {
 		return result;
 	} catch (error) {
 		throw new Error(`Error fetching most recent write-ups: ${error}`);
+	}
+};
+
+/************************************** Users **************************************/
+export const addUser = async (email: string) => {
+	try {
+		return await sql`INSERT INTO users (email) VALUES (${email})`;
+	} catch (error) {
+		throw new Error(`Error adding user email ${email} to database: ${error}`);
 	}
 };
