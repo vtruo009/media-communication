@@ -7,7 +7,7 @@ const PolicyWriteups = async () => {
 		const writeups = (await getAllWriteups()) as WriteUp[];
 
 		return (
-			<div className='py-12 px-52'>
+			<div className='min-h-screen py-12 px-52'>
 				{writeups.map((writeup) => (
 					<Writeup key={writeup.id} {...writeup} />
 				))}

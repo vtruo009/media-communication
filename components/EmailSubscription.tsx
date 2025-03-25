@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { toast } from 'sonner';
+import { addUser } from '@/lib/database';
 
 const isValidEmail = (email: string) => {
 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -13,13 +14,22 @@ const isValidEmail = (email: string) => {
 const EmailSubscription = () => {
 	const [email, setEmail] = useState<string>('');
 
-	const handleOnClick = () => {
+	const handleOnClick = async () => {
 		if (!email.trim()) {
 			toast.error('Email cannot be empty.');
 		} else if (!isValidEmail(email)) {
 			toast.error('Please enter a valid email.');
 		} else {
-			toast.success("You've subscribed to updates and announcements!");
+			try {
+				await addUser(email);
+				toast.success(
+					'You have successfully subscribed to weekly updates/announcements!'
+				);
+				setEmail('');
+			} catch (error) {
+				console.error(error);
+				toast.error('This email is already subscribed.');
+			}
 		}
 	};
 
