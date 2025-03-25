@@ -5,7 +5,6 @@ import { WriteUp } from '@/lib/mixin';
 const PolicyWriteups = async () => {
 	try {
 		const writeups = (await getAllWriteups()) as WriteUp[];
-
 		return (
 			<div className='py-12 px-52'>
 				{writeups.map((writeup) => (
