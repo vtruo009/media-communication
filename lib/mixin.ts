@@ -6,7 +6,7 @@ export interface WriteUp {
 	content: string;
 	categories: string[];
 	sources: string[];
-	thumbnail: string;
+	thumbnail?: string;
 	icon?: React.ReactElement;
 }
 
