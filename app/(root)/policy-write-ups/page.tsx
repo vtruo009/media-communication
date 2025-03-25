@@ -5,7 +5,7 @@ import { getWriteupCount, getWriteups } from '@/lib/database';
 const PolicyWriteups = async ({
 	searchParams,
 }: {
-	searchParams: { page: string };
+	searchParams: Promise<{ page: string }>;
 }) => {
 	try {
 		const { page } = await searchParams;
