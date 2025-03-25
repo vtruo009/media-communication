@@ -1,15 +1,26 @@
 'use server';
 
 import { neon } from '@neondatabase/serverless';
+import { WriteUp } from './mixin';
 
 const sql = neon(process.env.DATABASE_URL || '');
 
-/************************************** Write-ups **************************************/
-export const getAllWriteups = async () => {
+export const getWriteups = async (page: number, size: number) => {
 	try {
-		return await sql`SELECT * FROM write_ups`;
+		return (await sql`SELECT * FROM write_ups ORDER BY published LIMIT ${size} OFFSET ${
+			(page - 1) * size
+		} ROWS`) as WriteUp[];
 	} catch (error) {
 		throw new Error(`Error fetching all write-ups: ${error}`);
+	}
+};
+
+export const getWriteupCount = async () => {
+	try {
+		const result = await sql`SELECT COUNT(*) FROM write_ups`;
+		return parseInt(result[0].count);
+	} catch (error) {
+		throw new Error(`Error getting total count of write_ups table: ${error}`);
 	}
 };
 
