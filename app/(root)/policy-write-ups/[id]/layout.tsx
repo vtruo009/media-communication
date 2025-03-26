@@ -5,8 +5,17 @@ import { ArrowUpRight } from 'lucide-react';
 import { getMostRecent } from '@/lib/database';
 import { WriteUp } from '@/lib/mixin';
 
-const OverviewLayout = async ({ children }: { children: React.ReactNode }) => {
-	const mostRecentWriteups = (await getMostRecent()) as WriteUp[];
+const OverviewLayout = async ({
+	children,
+	params,
+}: {
+	children: React.ReactNode;
+	params: Promise<{ id: string }>;
+}) => {
+	const { id: currentWriteupId } = await params;
+	const mostRecentWriteups = (await getMostRecent(
+		currentWriteupId
+	)) as WriteUp[];
 
 	return (
 		<div className='flex flex-row w-full py-[5%] px-[10%] gap-x-14'>

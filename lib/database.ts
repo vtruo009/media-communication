@@ -36,10 +36,10 @@ export const getWriteup = async (id: string) => {
 	}
 };
 
-export const getMostRecent = async () => {
+export const getMostRecent = async (idToFilter: string) => {
 	try {
 		const result =
-			await sql`SELECT * FROM write_ups ORDER BY published LIMIT 4`;
+			await sql`SELECT * FROM write_ups WHERE id != ${idToFilter} ORDER BY published LIMIT 4`;
 
 		return result;
 	} catch (error) {
