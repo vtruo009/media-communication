@@ -19,7 +19,7 @@ export default function RootLayout({
 		<html lang='en'>
 			<body className='min-h-screen antialiased font-geist-mono bg-sea-salt'>
 				<Header />
-				{children}
+				<div className='min-h-screen'>{children}</div>
 				<Footer />
 				<Toaster richColors />
 			</body>
