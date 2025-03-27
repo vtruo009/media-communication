@@ -15,7 +15,7 @@ const PolicyWriteups = async ({
 		const writeups = await getWriteups(Number(page), size);
 
 		return (
-			<div className='w-1/2 mx-auto'>
+			<div className='w-1/2 mx-auto pt-24'>
 				{writeups.map((writeup) => (
 					<Writeup
 						key={writeup.id}

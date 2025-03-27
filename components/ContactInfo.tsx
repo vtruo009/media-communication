@@ -1,13 +1,16 @@
 import { Contact } from '@/lib/mixin';
+import Image from 'next/image';
 
 const ContactInfo = ({ name, phone, email, image }: Contact) => {
 	return (
 		<div className='flex gap-x-8 px-4'>
-			<div className='w-52 h-52 overflow-hidden'>
-				<img
+			<div className='w-52 h-52 rounded-full overflow-hidden'>
+				<Image
 					src={image}
-					className='w-full h-full object-cover object-top rounded-full'
-					alt='representative picture'
+					width={200}
+					height={200}
+					className='w-full h-full object-cover object-center'
+					alt='picture of board member'
 				/>
 			</div>
 			<div className='w-2/3'>
@@ -21,14 +24,6 @@ const ContactInfo = ({ name, phone, email, image }: Contact) => {
 				<a href={`email:${email}`} className='text-2xl'>
 					{email}
 				</a>
-				{/* <h3 className='text-2xl font-bold mb-1'>Local office numbers:</h3> */}
-				{/* {localOfficeNumbers.map((localPhone) => (
-					<div>
-						<a href={`tel:${localPhone}`} className='text-lg'>
-							{localPhone}
-						</a>
-					</div>
-				))} */}
 			</div>
 		</div>
 	);

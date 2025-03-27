@@ -21,7 +21,7 @@ const OverviewLayout = async ({
 		<div className='flex flex-row w-full py-[5%] px-[10%] gap-x-14'>
 			<aside
 				id='most-recent'
-				className='w-full md:w-1/4 flex flex-col shrink-0 float-right'
+				className='w-full md:w-1/4 flex flex-col shrink-0 float-left'
 			>
 				<h2 className='leading-none font-extrabold text-xl pb-3 border-b-4 border-gray-200'>
 					Most Recent
