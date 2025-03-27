@@ -22,3 +22,13 @@
 	height: auto;
 	flex-shrink: 0;
 }
+
+.mobile-nav {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	min-height: 100vh;
+	background-color: var(--color-sea-salt);
+	padding: 8rem 0;
+}
