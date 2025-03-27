@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
-import WriteupCompact from '@/components/WriteupCompact';
+import Writeup from '@/components/Writeup';
 import { ArrowUpRight } from 'lucide-react';
 import { getMostRecent } from '@/lib/database';
 import { WriteUp } from '@/lib/mixin';
@@ -30,7 +30,12 @@ const OverviewLayout = async ({
 					<ul className='mb-4'>
 						{mostRecentWriteups.map((writeup) => (
 							<li key={writeup.id}>
-								<WriteupCompact {...writeup} />
+								<Writeup
+									compact
+									id={writeup.id}
+									title={writeup.title}
+									published={writeup.published}
+								/>
 							</li>
 						))}
 					</ul>

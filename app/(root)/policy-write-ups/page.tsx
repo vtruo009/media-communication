@@ -15,9 +15,14 @@ const PolicyWriteups = async ({
 		const writeups = await getWriteups(Number(page), size);
 
 		return (
-			<div className='py-12 px-52'>
+			<div className='w-1/2 mx-auto'>
 				{writeups.map((writeup) => (
-					<Writeup key={writeup.id} {...writeup} />
+					<Writeup
+						key={writeup.id}
+						id={writeup.id}
+						title={writeup.title}
+						published={writeup.published}
+					/>
 				))}
 				<div className='py-8'>
 					<PaginationWithLinks
