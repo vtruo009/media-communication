@@ -24,7 +24,7 @@ const PolicyWriteups = async ({
 						published={writeup.published}
 					/>
 				))}
-				<div className='pt-8'>
+				<div className='py-8'>
 					<PaginationWithLinks
 						totalCount={count}
 						pageSize={size}

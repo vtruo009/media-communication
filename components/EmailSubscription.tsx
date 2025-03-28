@@ -34,10 +34,10 @@ const EmailSubscription = () => {
 	};
 
 	return (
-		<div className='w-1/2 flex flex-col items-start p-8'>
-			<h2 className='font-semibold text-2xl mb-8'>
+		<div className='flex flex-col items-start'>
+			<h4 className='font-semibold text-2xl mb-6 md:text-lg md:mb-4'>
 				Subscribe for updates and announcements.
-			</h2>
+			</h4>
 			<div className='w-full flex flex-row gap-x-4'>
 				<Input
 					placeholder='example@email.com'

@@ -18,8 +18,10 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<body className='min-h-screen antialiased font-geist-mono bg-sea-salt'>
-				<Header />
-				<div className='min-h-screen'>{children}</div>
+				<div>
+					<Header />
+					<div className='min-h-screen'>{children}</div>
+				</div>
 				<Footer />
 				<Toaster richColors />
 			</body>
