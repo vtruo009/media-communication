@@ -1,5 +1,5 @@
 export interface WriteUp {
-	id: string | number;
+	id: string;
 	author: string;
 	published: Date;
 	title: string;

@@ -1,18 +1,27 @@
 import Link from 'next/link';
 import React from 'react';
-import WriteupCompact from '@/components/WriteupCompact';
+import Writeup from '@/components/Writeup';
 import { ArrowUpRight } from 'lucide-react';
 import { getMostRecent } from '@/lib/database';
 import { WriteUp } from '@/lib/mixin';
 
-const OverviewLayout = async ({ children }: { children: React.ReactNode }) => {
-	const mostRecentWriteups = (await getMostRecent()) as WriteUp[];
+const OverviewLayout = async ({
+	children,
+	params,
+}: {
+	children: React.ReactNode;
+	params: Promise<{ id: string }>;
+}) => {
+	const { id: currentWriteupId } = await params;
+	const mostRecentWriteups = (await getMostRecent(
+		currentWriteupId
+	)) as WriteUp[];
 
 	return (
-		<div className='flex flex-row w-full py-[5%] px-[10%] gap-x-14'>
+		<div className='w-full flex flex-col-reverse lg:flex-row py-[5%] px-[10%] gap-x-14 lg: '>
 			<aside
 				id='most-recent'
-				className='w-full md:w-1/4 flex flex-col shrink-0 float-right'
+				className='w-full flex flex-col my-8 lg:w-1/4 lg:my-0'
 			>
 				<h2 className='leading-none font-extrabold text-xl pb-3 border-b-4 border-gray-200'>
 					Most Recent
@@ -21,7 +30,12 @@ const OverviewLayout = async ({ children }: { children: React.ReactNode }) => {
 					<ul className='mb-4'>
 						{mostRecentWriteups.map((writeup) => (
 							<li key={writeup.id}>
-								<WriteupCompact {...writeup} />
+								<Writeup
+									compact
+									id={writeup.id}
+									title={writeup.title}
+									published={writeup.published}
+								/>
 							</li>
 						))}
 					</ul>
@@ -36,7 +50,7 @@ const OverviewLayout = async ({ children }: { children: React.ReactNode }) => {
 					<ArrowUpRight className='w-4 h-4' />
 				</Link>
 			</aside>
-			<main className='w-full md:w-3/4 min-h-screen overflow-y-auto float-right'>
+			<main className='w-full min-h-screen overflow-y-auto lg:w-3/4 '>
 				{children}
 			</main>
 		</div>

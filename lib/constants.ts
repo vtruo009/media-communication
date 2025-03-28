@@ -2,7 +2,7 @@ import { Contact, WriteUp } from './mixin';
 
 export const writeups: WriteUp[] = [
 	{
-		id: 1,
+		id: '1',
 		published: new Date(2025, 0, 30),
 		thumbnail: '/pusd.png',
 		title:
@@ -14,7 +14,7 @@ export const writeups: WriteUp[] = [
 		sources: ['source1.com', 'source2.com'],
 	},
 	{
-		id: 2,
+		id: '2',
 		published: new Date(2025, 1, 5),
 		thumbnail: '/pusd.png',
 		title: 'Article #2',
@@ -25,7 +25,7 @@ export const writeups: WriteUp[] = [
 		sources: ['source1.com', 'source2.com'],
 	},
 	{
-		id: 3,
+		id: '3',
 		published: new Date(2025, 1, 22),
 		thumbnail: '/pusd.png',
 		title: 'Article #3',
@@ -37,7 +37,7 @@ export const writeups: WriteUp[] = [
 	},
 	{
 		published: new Date(2025, 2, 3),
-		id: 4,
+		id: '4',
 		thumbnail: '/pusd.png',
 		title: 'Article #4',
 		author: 'Neville Longbottom',
@@ -47,7 +47,7 @@ export const writeups: WriteUp[] = [
 		sources: ['source1.com', 'source2.com'],
 	},
 	{
-		id: 5,
+		id: '5',
 		published: new Date(2025, 2, 14),
 		thumbnail: '/pusd.png',
 		title: 'Article #5',
