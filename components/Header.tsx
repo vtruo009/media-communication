@@ -26,7 +26,7 @@ const Header = () => {
 
 				<div className={`${isOpen ? 'mobile-nav' : 'max-lg:hidden'} block`}>
 					<nav>
-						<ul className='px-12 lg:flex lg:flex-row lg:gap-x-4'>
+						<ul className='px-12 lg:flex lg:flex-row lg:px-0 lg:gap-x-4'>
 							{tabs.map((tab, key) => (
 								<li key={key} className='flex flex-col gap-y-8'>
 									<Link
