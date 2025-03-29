@@ -30,7 +30,9 @@ const WriteupsContainer = async ({
 		) : (
 			<p>No policy write-ups match the search term...</p>
 		);
-	} catch (error) {}
+	} catch (error) {
+		throw error;
+	}
 };
 
 export default WriteupsContainer;

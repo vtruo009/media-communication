@@ -21,7 +21,7 @@ const GettingStarted = () => {
 	];
 
 	return (
-		<div className='flex flex-col items-center pt-24'>
+		<div className='flex flex-col items-center'>
 			{instructions.map((instruction) => (
 				<Instruction
 					key={instruction.label}
