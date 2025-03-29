@@ -46,3 +46,12 @@ export const getMostRecent = async (idToFilter: string) => {
 		throw new Error(`Error fetching most recent write-ups: ${error}`);
 	}
 };
+
+/************************************** Users **************************************/
+export const addUser = async (email: string) => {
+	try {
+		return await sql`INSERT INTO users (email) VALUES (${email})`;
+	} catch (error) {
+		throw new Error(`Error adding user email ${email} to database: ${error}`);
+	}
+};
