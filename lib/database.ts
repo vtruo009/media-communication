@@ -5,7 +5,7 @@ import { WriteUp } from './mixin';
 
 const sql = neon(process.env.DATABASE_URL || '');
 
-export const getWriteups = async (page: number, size: number) => {
+export const getAllWriteups = async (page: number, size: number) => {
 	try {
 		return (await sql`SELECT id, title, published FROM write_ups ORDER BY published LIMIT ${size} OFFSET ${
 			(page - 1) * size
@@ -15,9 +15,27 @@ export const getWriteups = async (page: number, size: number) => {
 	}
 };
 
-export const getWriteupCount = async () => {
+export const getFilteredWriteups = async (
+	page: number,
+	query: string,
+	limit: number
+) => {
 	try {
-		const result = await sql`SELECT COUNT(*) FROM write_ups`;
+		return await sql`SELECT distinct title, published, categories
+			FROM write_ups, lateral unnest(categories) AS category
+			WHERE (category LIKE ${`%${query}%`} OR title LIKE ${`%${query}%`})
+			ORDER BY published
+			LIMIT ${limit} OFFSET ${(page - 1) * limit}`;
+	} catch (error) {
+		throw new Error(`Error fetching filtered write-ups: ${error}`);
+	}
+};
+
+export const getWriteupCount = async (query: string) => {
+	try {
+		const result =
+			await sql`SELECT COUNT(*) FROM write_ups, lateral unnest(categories) AS category
+		WHERE (category LIKE ${`%${query}%`} OR title LIKE ${`%${query}%`})`;
 		return parseInt(result[0].count);
 	} catch (error) {
 		throw new Error(`Error getting total count of write_ups table: ${error}`);
