@@ -1,32 +1,28 @@
-'use cilent';
+'use client';
 
-import { WriteUp } from '@/lib/mixin';
+import { useDebouncedCallback } from 'use-debounce';
 import { Button } from './ui/button';
-import { Dispatch, SetStateAction, useState } from 'react';
 import { Input } from './ui/input';
 import { Search as SearchIcon } from 'lucide-react';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
-const Search = ({
-	writeups,
-	setFilteredWriteups,
-}: {
-	writeups: WriteUp[];
-	setFilteredWriteups: Dispatch<SetStateAction<WriteUp[]>>;
-}) => {
-	const [searchText, setSearchText] = useState<string>('');
+const Search = () => {
+	const searchParams = useSearchParams();
+	const pathname = usePathname();
+	const { replace } = useRouter();
 
-	const handleOnClick = () => {
-		const filtered = writeups.filter((writeup) => {
-			const lowercaseSearchText = searchText.toLowerCase();
-			const inTitle = writeup.title.toLowerCase().includes(lowercaseSearchText);
-			const inCategories = writeup.categories.some((category) =>
-				category.toLowerCase().includes(lowercaseSearchText)
-			);
+	const handleOnClick = () => {};
 
-			return inTitle || inCategories;
-		});
-		setFilteredWriteups(filtered);
-	};
+	const handleSearch = useDebouncedCallback((term: string) => {
+		const params = new URLSearchParams(searchParams);
+
+		if (term) {
+			params.set('query', term.toLowerCase());
+		} else {
+			params.delete('query');
+		}
+		replace(`${pathname}?${params.toString()}`);
+	}, 500);
 
 	return (
 		<div className='flex flex-row items-center justify-evenly gap-x-4 mb-8'>
@@ -35,8 +31,9 @@ const Search = ({
 				<Input
 					className='border-0 focus-visible:ring-0 shadow-none py-0 px-2'
 					placeholder='Search for issue...'
-					value={searchText}
-					onChange={(e) => setSearchText(e.currentTarget.value)}
+					type='text'
+					defaultValue={searchParams.get('query')?.toString()}
+					onChange={(e) => handleSearch(e.target.value)}
 				/>
 			</div>
 			<Button

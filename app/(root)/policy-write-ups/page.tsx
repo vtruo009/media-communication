@@ -1,35 +1,39 @@
 import { PaginationWithLinks } from '@/components/ui/pagination-with-links';
-import Writeup from '@/components/Writeup';
-import { getWriteupCount, getWriteups } from '@/lib/database';
+import Search from '@/components/Search';
+import { Suspense } from 'react';
+import WriteupsContainer from '@/components/WriteupsContainer';
+import { getWriteupCount } from '@/lib/database';
+
+const LIMIT = 10;
 
 const PolicyWriteups = async ({
 	searchParams,
 }: {
-	searchParams: Promise<{ page: string }>;
+	searchParams: Promise<{ query?: string; page: string }>;
 }) => {
 	try {
-		const { page } = await searchParams;
-		const size = 10;
+		const params = await searchParams;
+		const query = params?.query || '';
+		const page = Number(params?.page) || 1;
 
-		const count = await getWriteupCount();
-		const writeups = await getWriteups(Number(page), size);
+		const count = await getWriteupCount(query);
 
 		return (
 			<div className='w-full px-6 lg:w-3/4 lg:mx-auto lg:pt-24'>
-				{writeups.map((writeup) => (
-					<Writeup
-						key={writeup.id}
-						id={writeup.id}
-						title={writeup.title}
-						published={writeup.published}
-					/>
-				))}
+				<Search />
+
+				<Suspense key={query + page} fallback={<p>Loading...</p>}>
+					<WriteupsContainer query={query} page={page} limit={LIMIT} />
+				</Suspense>
+
 				<div className='py-8'>
-					<PaginationWithLinks
-						totalCount={count}
-						pageSize={size}
-						page={Number(page)}
-					/>
+					{count > 0 && (
+						<PaginationWithLinks
+							totalCount={count}
+							pageSize={LIMIT}
+							page={Number(page)}
+						/>
+					)}
 				</div>
 			</div>
 		);
