@@ -5,6 +5,7 @@ import { WriteUp } from './mixin';
 
 const sql = neon(process.env.DATABASE_URL || '');
 
+/**************************** WRITE-UPS ****************************/
 export const getAllWriteups = async (page: number, size: number) => {
 	try {
 		return (await sql`SELECT id, title, published FROM write_ups ORDER BY published LIMIT ${size} OFFSET ${
@@ -62,5 +63,14 @@ export const getMostRecent = async (idToFilter: string) => {
 		return result;
 	} catch (error) {
 		throw new Error(`Error fetching most recent write-ups: ${error}`);
+	}
+};
+
+/**************************** BOARD MEMBERS ****************************/
+export const getBoardMembers = async () => {
+	try {
+		return await sql`SELECT * FROM board_members`;
+	} catch (error) {
+		throw new Error(`Error fetching board members: ${error}`);
 	}
 };
