@@ -10,11 +10,11 @@ export interface WriteUp {
 	icon?: React.ReactElement;
 }
 
-export interface Contact {
-	id: string;
+export interface BoardMember {
+	id: number;
 	name: string;
 	phone: string;
 	email: string;
-	district: string;
-	image: string;
+	district: number;
+	image_url: string;
 }

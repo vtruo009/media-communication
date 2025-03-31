@@ -18,7 +18,7 @@ const OverviewLayout = async ({
 	)) as WriteUp[];
 
 	return (
-		<div className='w-full flex flex-col-reverse lg:flex-row py-[5%] px-[10%] gap-x-14 lg: '>
+		<div className='w-full flex flex-col-reverse lg:flex-row p-[5%] gap-x-10'>
 			<aside
 				id='most-recent'
 				className='w-full flex flex-col my-8 lg:w-1/4 lg:my-0'
@@ -50,7 +50,7 @@ const OverviewLayout = async ({
 					<ArrowUpRight className='w-4 h-4' />
 				</Link>
 			</aside>
-			<main className='w-full min-h-screen overflow-y-auto lg:w-3/4 '>
+			<main className='w-full min-h-screen overflow-y-auto px-4 lg:w-3/4'>
 				{children}
 			</main>
 		</div>
