@@ -1,14 +1,21 @@
+import BoardMembers from '@/components/BoardMembers';
 import Categories from '@/components/Categories';
-import ContactTab from '@/components/ContactTab';
-import { getWriteup } from '@/lib/database';
+import {
+	getBoardMembers,
+	getBoardMemberCount,
+	getWriteup,
+} from '@/lib/database';
+import { BoardMember } from '@/lib/mixin';
 
 const Overview = async ({ params }: { params: Promise<{ id: string }> }) => {
-	const { id } = await params;
-
-	if (!id) return <h1>Loading...</h1>;
-
 	try {
+		const { id } = await params;
+
+		if (!id) return <h1>Loading...</h1>;
+
 		const writeup = await getWriteup(id);
+		const boardMemberCount = await getBoardMemberCount();
+
 		return (
 			<article>
 				<div className='flex justify-between mb-2 text-blue-900 font-semibold'>
@@ -23,16 +30,15 @@ const Overview = async ({ params }: { params: Promise<{ id: string }> }) => {
 						<Categories categories={writeup?.categories ?? []} />
 					</div>
 					<p className='py-4'>{writeup?.content}</p>
-					<ContactTab />
+					<BoardMembers
+						boardMemberCount={boardMemberCount}
+						boardMembers={(await getBoardMembers()) as BoardMember[]}
+					/>
 				</div>
 			</article>
 		);
 	} catch (error) {
-		return (
-			<p>
-				Error loading write-up with id ${id}: {(error as Error).message}
-			</p>
-		);
+		return <p>Error loading write-up: {(error as Error).message}</p>;
 	}
 };
 

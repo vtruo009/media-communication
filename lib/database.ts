@@ -57,10 +57,7 @@ export const getWriteup = async (id: string) => {
 
 export const getMostRecent = async (idToFilter: string) => {
 	try {
-		const result =
-			await sql`SELECT * FROM write_ups WHERE id != ${idToFilter} ORDER BY published LIMIT 4`;
-
-		return result;
+		return await sql`SELECT * FROM write_ups WHERE id != ${idToFilter} ORDER BY published LIMIT 4`;
 	} catch (error) {
 		throw new Error(`Error fetching most recent write-ups: ${error}`);
 	}
@@ -69,8 +66,17 @@ export const getMostRecent = async (idToFilter: string) => {
 /**************************** BOARD MEMBERS ****************************/
 export const getBoardMembers = async () => {
 	try {
-		return await sql`SELECT * FROM board_members`;
+		return await sql`SELECT * FROM board_members ORDER BY district`;
 	} catch (error) {
 		throw new Error(`Error fetching board members: ${error}`);
+	}
+};
+
+export const getBoardMemberCount = async () => {
+	try {
+		const result = await sql`SELECT COUNT(*) FROM board_members`;
+		return Number(result[0].count);
+	} catch (error) {
+		throw new Error(`Error fetching board member count: ${error}`);
 	}
 };

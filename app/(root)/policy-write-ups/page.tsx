@@ -19,7 +19,7 @@ const PolicyWriteups = async ({
 		const count = await getWriteupCount(query);
 
 		return (
-			<div className='w-full px-6 lg:w-3/4 lg:mx-auto lg:pt-24'>
+			<div className='w-full p-[5%] lg:w-3/4 lg:mx-auto'>
 				<Search />
 
 				<Suspense key={query + page} fallback={<p>Loading...</p>}>

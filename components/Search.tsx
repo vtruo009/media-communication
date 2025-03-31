@@ -27,7 +27,7 @@ const Search = () => {
 	return (
 		<div className='flex flex-row items-center justify-evenly gap-x-4 mb-8'>
 			<div className='w-[85%] flex flex-row items-center border-2 rounded-lg p-2 gap-x-2'>
-				<SearchIcon />
+				<SearchIcon className='hidden md:block' />
 				<Input
 					className='border-0 focus-visible:ring-0 shadow-none py-0 px-2'
 					placeholder='Search for issue...'
@@ -37,10 +37,11 @@ const Search = () => {
 				/>
 			</div>
 			<Button
-				className='w-[15%] h-auto bg-blue-300 hover:bg-blue-400 text-2xl/relaxed cursor-pointer'
+				className='w-20 h-14 bg-blue-300 hover:bg-blue-400 text-2xl/relaxed cursor-pointer md:w-[15%] md:h-auto'
 				onClick={handleOnClick}
 			>
-				Search
+				<SearchIcon className='size-8 md:hidden size' />
+				<p className='hidden md:block'>Search</p>
 			</Button>
 		</div>
 	);
