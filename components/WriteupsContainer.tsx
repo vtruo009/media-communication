@@ -28,7 +28,7 @@ const WriteupsContainer = async ({
 				))}
 			</ul>
 		) : (
-			<p>No policy write-ups match the search term...</p>
+			<p>Cannot find policy write-up matching &apos;{query}&apos;...</p>
 		);
 	} catch (error) {
 		throw error;
