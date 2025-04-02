@@ -138,3 +138,28 @@ export const getBoardMemberCount = async () => {
 		throw new Error(`Error fetching board member count: ${error}`);
 	}
 };
+
+/************************************** Users **************************************/
+export const postUser = async (id: string) => {
+	try {
+		return await sql`INSERT INTO users (user_id) SELECT ${id}
+						WHERE NOT EXISTS (SELECT 1 FROM users WHERE users.user_id = ${id})`;
+	} catch (error) {
+		throw new Error(`Error adding user ${id} to database: ${error}`);
+	}
+};
+
+/************************************** Calls **************************************/
+export const postCall = async (
+	caller_id: string,
+	receiver: string,
+	via: string
+) => {
+	try {
+		return await sql`INSERT INTO calls (created, caller_id, receiver, via) VALUES (${new Date()}, ${caller_id}, ${receiver}, ${via})`;
+	} catch (error) {
+		throw new Error(
+			`Error posting call record to calls table for caller ${caller_id} to ${receiver} via ${via}: ${error}`
+		);
+	}
+};

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Card, CardContent } from './ui/card';
 import {
@@ -12,6 +12,7 @@ import {
 	SelectValue,
 } from './ui/select';
 import { BoardMember } from '@/lib/mixin';
+import { postCall, postUser } from '@/lib/database';
 
 const BoardMembers = ({
 	boardMemberCount,
@@ -21,6 +22,16 @@ const BoardMembers = ({
 	boardMembers: BoardMember[];
 }) => {
 	const [district, setDistrict] = useState<number>();
+	const [uuid, setUUID] = useState<string>('');
+
+	useEffect(() => {
+		const storedUUID = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('user_uuid'))
+			?.split('=')[1];
+
+		if (storedUUID) setUUID(storedUUID);
+	}, []);
 
 	const selectItemList = () => {
 		const triggers = [];
@@ -32,6 +43,15 @@ const BoardMembers = ({
 			);
 		}
 		return triggers;
+	};
+
+	const handleClick = async (via: string) => {
+		try {
+			await postCall(uuid, boardMembers[district! - 1].name, via);
+			await postUser(uuid);
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	return (
@@ -63,16 +83,18 @@ const BoardMembers = ({
 								</h4>
 								<div className='pt-2'>
 									<a
-										href='tel:PHONE_NUM'
 										className='text-3xl text-blue-500 font-semibold underline lg:text-4xl'
+										href='tel:PHONE_NUM'
+										onClick={() => handleClick('phone')}
 									>
 										{boardMembers[district - 1].phone}
 									</a>
 								</div>
 								<div className='pt-2'>
 									<a
-										href={`email:${boardMembers[district - 1].email}`}
 										className='text-xl lg:text-2xl'
+										href={`email:${boardMembers[district - 1].email}`}
+										onClick={() => handleClick('email')}
 									>
 										{boardMembers[district - 1].email}
 									</a>
