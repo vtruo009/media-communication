@@ -31,6 +31,7 @@ const Overview = async ({ params }: { params: Promise<{ id: string }> }) => {
 					</div>
 					<p className='py-4'>{writeup?.content}</p>
 					<BoardMembers
+						issueId={id}
 						boardMemberCount={boardMemberCount}
 						boardMembers={(await getBoardMembers()) as BoardMember[]}
 					/>

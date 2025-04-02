@@ -11,18 +11,28 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from './ui/select';
+import { Button } from '@/components/ui/button';
 import { BoardMember } from '@/lib/mixin';
-import { postCall, postUser } from '@/lib/database';
+import { postCall, postUser, putCall } from '@/lib/database';
+
+enum CallOutcome {
+	UNAVAILABLE = 'unavailable',
+	VOICEMAIL = 'voicemail',
+	EMAIL = 'email',
+}
 
 const BoardMembers = ({
+	issueId,
 	boardMemberCount,
 	boardMembers,
 }: {
+	issueId: string;
 	boardMemberCount: number;
 	boardMembers: BoardMember[];
 }) => {
 	const [district, setDistrict] = useState<number>();
-	const [uuid, setUUID] = useState<string>('');
+	const [userId, setUserId] = useState<string>('');
+	const [callId, setCallId] = useState<string>('');
 
 	useEffect(() => {
 		const storedUUID = document.cookie
@@ -30,7 +40,7 @@ const BoardMembers = ({
 			.find((row) => row.startsWith('user_uuid'))
 			?.split('=')[1];
 
-		if (storedUUID) setUUID(storedUUID);
+		if (storedUUID) setUserId(storedUUID);
 	}, []);
 
 	const selectItemList = () => {
@@ -47,8 +57,22 @@ const BoardMembers = ({
 
 	const handleClick = async (via: string) => {
 		try {
-			await postCall(uuid, boardMembers[district! - 1].name, via);
-			await postUser(uuid);
+			const storedCallId: string = await postCall(
+				userId,
+				boardMembers[district! - 1].name,
+				via,
+				issueId
+			);
+			setCallId(storedCallId);
+			await postUser(userId);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	const updateCallOutcome = async (outcome: CallOutcome) => {
+		try {
+			await putCall(callId, outcome);
 		} catch (error) {
 			console.error(error);
 		}
@@ -66,42 +90,66 @@ const BoardMembers = ({
 			</Select>
 			<div className='py-6'>
 				{district && (
-					<Card className='w-fit border-2'>
-						<CardContent className='flex flex-col items-center lg:flex-row lg:px-6 '>
-							<div className='w-52 h-52 rounded-full overflow-hidden shrink-0'>
-								<Image
-									src={boardMembers[district - 1].image_url}
-									width={200}
-									height={200}
-									className='w-full h-full object-cover object-center'
-									alt='picture of board member'
-								/>
-							</div>
-							<div className='text-center lg:w-2/3 lg:pl-8 lg:text-start'>
-								<h4 className='text-2xl font-bold pt-2 lg:pt-0'>
-									{boardMembers[district - 1].name}
-								</h4>
-								<div className='pt-2'>
-									<a
-										className='text-3xl text-blue-500 font-semibold underline lg:text-4xl'
-										href='tel:PHONE_NUM'
-										onClick={() => handleClick('phone')}
-									>
-										{boardMembers[district - 1].phone}
-									</a>
+					<>
+						<Card className='w-fit border-2'>
+							<CardContent className='flex flex-col items-center lg:flex-row lg:px-6 '>
+								<div className='w-52 h-52 rounded-full overflow-hidden shrink-0'>
+									<Image
+										src={boardMembers[district - 1].image_url}
+										width={200}
+										height={200}
+										className='w-full h-full object-cover object-center'
+										alt='picture of board member'
+									/>
 								</div>
-								<div className='pt-2'>
-									<a
-										className='text-xl lg:text-2xl'
-										href={`email:${boardMembers[district - 1].email}`}
-										onClick={() => handleClick('email')}
-									>
-										{boardMembers[district - 1].email}
-									</a>
+								<div className='text-center lg:w-2/3 lg:pl-8 lg:text-start'>
+									<h4 className='text-2xl font-bold pt-2 lg:pt-0'>
+										{boardMembers[district - 1].name}
+									</h4>
+									<div className='pt-2'>
+										<a
+											className='text-3xl text-blue-500 font-semibold underline lg:text-4xl'
+											href='tel:PHONE_NUM'
+											onClick={() => handleClick('phone')}
+										>
+											{boardMembers[district - 1].phone}
+										</a>
+									</div>
+									<div className='pt-2'>
+										<a
+											className='text-xl lg:text-2xl'
+											href={`email:${boardMembers[district - 1].email}`}
+											onClick={() => handleClick('email')}
+										>
+											{boardMembers[district - 1].email}
+										</a>
+									</div>
+								</div>
+							</CardContent>
+						</Card>
+						{callId && (
+							<div className='py-4'>
+								<div className='mb-4'>
+									Please share the result of your call:
+								</div>
+								<div className='flex flex-col gap-4 md:flex-row'>
+									{Object.keys(CallOutcome).map((outcome) => (
+										<Button
+											key={CallOutcome[outcome as keyof typeof CallOutcome]}
+											className='bg-blue-300 w-[150px] hover:bg-blue-400 cursor-pointer'
+											onClick={() =>
+												updateCallOutcome(
+													CallOutcome[outcome as keyof typeof CallOutcome]
+												)
+											}
+										>
+											{outcome}
+										</Button>
+									))}
 								</div>
 							</div>
-						</CardContent>
-					</Card>
+						)}
+					</>
 				)}
 			</div>
 		</>

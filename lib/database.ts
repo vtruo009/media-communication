@@ -8,9 +8,12 @@ const sql = neon(process.env.DATABASE_URL || '');
 /**************************** WRITE-UPS ****************************/
 export const getAllWriteups = async (page: number, size: number) => {
 	try {
-		return (await sql`SELECT id, title, published FROM write_ups ORDER BY published LIMIT ${size} OFFSET ${
-			(page - 1) * size
-		} ROWS`) as WriteUp[];
+		return (await sql`
+			SELECT id, title, published
+			FROM write_ups
+			ORDER BY published
+			LIMIT ${size} OFFSET ${(page - 1) * size} ROWS
+		`) as WriteUp[];
 	} catch (error) {
 		throw new Error(`Error fetching all write-ups: ${error}`);
 	}
@@ -22,11 +25,13 @@ export const getFilteredWriteups = async (
 	limit: number
 ) => {
 	try {
-		return await sql`SELECT distinct title, published, categories
+		return await sql`
+			SELECT distinct title, published, categories
 			FROM write_ups, lateral unnest(categories) AS category
 			WHERE (category LIKE '%' || ${query} || '%' OR title LIKE '%' || ${query} || '%')
 			ORDER BY published
-			LIMIT ${limit} OFFSET ${(page - 1) * limit}`;
+			LIMIT ${limit} OFFSET ${(page - 1) * limit}
+		`;
 	} catch (error) {
 		throw new Error(`Error fetching filtered write-ups: ${error}`);
 	}
@@ -34,9 +39,11 @@ export const getFilteredWriteups = async (
 
 export const getWriteupCount = async (query: string) => {
 	try {
-		const result =
-			await sql`SELECT COUNT(DISTINCT write_ups.id) FROM write_ups, lateral unnest(categories) AS category
-		WHERE (category LIKE '%' || ${query} || '%' OR title LIKE '%' || ${query} || '%')`;
+		const result = await sql`
+				SELECT COUNT(DISTINCT write_ups.id)
+				FROM write_ups, lateral unnest(categories) AS category
+				WHERE (category LIKE '%' || ${query} || '%' OR title LIKE '%' || ${query} || '%')
+			`;
 		return parseInt(result[0].count);
 	} catch (error) {
 		throw new Error(`Error getting total count of write_ups table: ${error}`);
@@ -57,7 +64,9 @@ export const getWriteup = async (id: string) => {
 
 export const getMostRecentWriteups = async (idToFilter: string) => {
 	try {
-		return await sql`SELECT * FROM write_ups WHERE id != ${idToFilter} ORDER BY published LIMIT 4`;
+		return await sql`
+			SELECT * FROM write_ups WHERE id != ${idToFilter} ORDER BY published LIMIT 4
+		`;
 	} catch (error) {
 		throw new Error(`Error fetching most recent write-ups: ${error}`);
 	}
@@ -153,13 +162,64 @@ export const postUser = async (id: string) => {
 export const postCall = async (
 	caller_id: string,
 	receiver: string,
-	via: string
+	via: string,
+	id: string
 ) => {
 	try {
-		return await sql`INSERT INTO calls (created, caller_id, receiver, via) VALUES (${new Date()}, ${caller_id}, ${receiver}, ${via})`;
+		const result = await sql`
+				INSERT INTO calls (created, caller_id, receiver, via, issue_id)
+				VALUES (${new Date()}, ${caller_id}, ${receiver}, ${via}, ${id})
+				RETURNING call_id
+			`;
+
+		return result[0].call_id;
 	} catch (error) {
 		throw new Error(
 			`Error posting call record to calls table for caller ${caller_id} to ${receiver} via ${via}: ${error}`
+		);
+	}
+};
+
+export const putCall = async (callId: string, outcome: string) => {
+	try {
+		return await sql`
+			UPDATE calls SET outcome = ${outcome} WHERE call_id = ${callId}
+		`;
+	} catch (error) {
+		throw new Error(
+			`Error updating call record:
+				call_id: ${callId}
+				outcome: ${outcome}
+				: ${error}`
+		);
+	}
+};
+
+export const getAllCalls = async () => {
+	try {
+		return await sql`
+			SELECT * FROM calls
+			WHERE outcome != NULL
+		`;
+	} catch (error) {
+		throw new Error(`Error getting all calls: ${error}`);
+	}
+};
+
+export const getCallsForUser = async (userId: string) => {
+	try {
+		return await sql`
+			SELECT * FROM (
+				SELECT call_id, caller_id, issue_id, receiver, outcome, via, write_ups.id as write_up_id, videos.id as video_id FROM calls
+				LEFT JOIN write_ups
+				ON issue_id = write_ups.id
+				LEFT JOIN videos
+				ON issue_id = videos.id
+			) T WHERE caller_id = ${userId}
+		`;
+	} catch (error) {
+		throw new Error(
+			`Error getting the calls for user with uuid ${userId}: ${error}`
 		);
 	}
 };

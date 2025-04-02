@@ -11,10 +11,8 @@ export const middleware = (req: NextRequest) => {
 		const uuid = uuidv4();
 		console.log('set cookies');
 		res.cookies.set('user_uuid', uuid, {
-			// httpOnly: true,
-			httpOnly: false,
-			// secure: process.env.NODE_ENV === 'production',
-			secure: false,
+			httpOnly: true,
+			secure: process.env.NODE_ENV === 'production',
 			sameSite: 'lax',
 			expires: oneWeek,
 			path: '/',
