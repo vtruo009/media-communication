@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import { Toaster } from '@/components/ui/sonner';
 
 export const metadata: Metadata = {
 	title: 'Media Communications',
@@ -16,8 +18,12 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<body className='min-h-screen antialiased font-geist-mono bg-sea-salt'>
-				<Header />
-				{children}
+				<div>
+					<Header />
+					<div className='min-h-screen'>{children}</div>
+				</div>
+				<Footer />
+				<Toaster richColors />
 			</body>
 		</html>
 	);
