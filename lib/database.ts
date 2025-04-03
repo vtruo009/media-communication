@@ -197,10 +197,12 @@ export const putCall = async (callId: string, outcome: string) => {
 
 export const getAllCalls = async () => {
 	try {
-		return await sql`
-			SELECT * FROM calls
-			WHERE outcome != NULL
+		const result = await sql`
+			SELECT COUNT(*) FROM calls
+			WHERE outcome IS NOT NULL
 		`;
+
+		return Number(result[0].count);
 	} catch (error) {
 		throw new Error(`Error getting all calls: ${error}`);
 	}
