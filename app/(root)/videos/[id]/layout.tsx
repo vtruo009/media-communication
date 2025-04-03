@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import React from 'react';
-import Writeup from '@/components/Writeup';
 import { ArrowUpRight } from 'lucide-react';
-import { getMostRecentWriteups } from '@/lib/database';
+import { getMostRecentVideos } from '@/lib/database';
 import { WriteUp } from '@/lib/mixin';
+import Video from '@/components/Video';
 
 const OverviewLayout = async ({
 	children,
@@ -12,9 +12,9 @@ const OverviewLayout = async ({
 	children: React.ReactNode;
 	params: Promise<{ id: string }>;
 }) => {
-	const { id: currentWriteupId } = await params;
-	const mostRecentWriteups = (await getMostRecentWriteups(
-		currentWriteupId
+	const { id: currentVideoId } = await params;
+	const mostRecentVideos = (await getMostRecentVideos(
+		currentVideoId
 	)) as WriteUp[];
 
 	return (
@@ -26,26 +26,23 @@ const OverviewLayout = async ({
 				<h2 className='leading-none font-extrabold text-xl pb-3 border-b-4 border-gray-200'>
 					Most Recent
 				</h2>
-				{mostRecentWriteups.length > 0 ? (
+				{mostRecentVideos.length > 0 ? (
 					<ul className='mb-4'>
-						{mostRecentWriteups.map((writeup) => (
-							<li key={writeup.id}>
-								<Writeup
+						{mostRecentVideos.map((video) => (
+							<li key={video.id}>
+								<Video
 									compact
-									id={writeup.id}
-									title={writeup.title}
-									published={writeup.published}
+									id={video.id}
+									title={video.title}
+									published={video.published}
 								/>
 							</li>
 						))}
 					</ul>
 				) : (
-					<p>No new write-ups available</p>
+					<p>No new videos available</p>
 				)}
-				<Link
-					href={'/policy-write-ups'}
-					className='inline-flex items-center gap-1'
-				>
+				<Link href={'/videos'} className='inline-flex items-center gap-1'>
 					<span className='text-xs font-semibold'>VIEW ALL</span>
 					<ArrowUpRight className='w-4 h-4' />
 				</Link>

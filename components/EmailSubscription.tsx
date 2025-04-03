@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { toast } from 'sonner';
-import { addUser } from '@/lib/database';
+import { postUser } from '@/lib/database';
 
 const isValidEmail = (email: string) => {
 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -21,7 +21,7 @@ const EmailSubscription = () => {
 			toast.error('Please enter a valid email.');
 		} else {
 			try {
-				await addUser(email);
+				await postUser(email);
 				toast.success(
 					'You have successfully subscribed to weekly updates/announcements!'
 				);
