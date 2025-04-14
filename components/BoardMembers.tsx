@@ -16,7 +16,7 @@ import { BoardMember } from '@/lib/mixin';
 import { postCall, postUser, putCall } from '@/lib/database';
 
 enum CallOutcome {
-	UNAVAILABLE = 'unavailable',
+	SUCCESSFUL = 'successful',
 	VOICEMAIL = 'voicemail',
 	EMAIL = 'email',
 }
