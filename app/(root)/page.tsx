@@ -1,16 +1,27 @@
-import { getAllCalls } from '@/lib/database';
+import Stats from '@/components/Stats';
+import { getCallStats } from '@/lib/database';
 
 const Home = async () => {
-	const numCalls = await getAllCalls();
+	const { total, successes, voicemails, emails } = await getCallStats();
+	const stats = {
+		successes,
+		voicemails,
+		emails,
+	};
 
 	return (
-		<div>
-			<div className='flex flex-col h-[20vh] items-center justify-evenly bg-blue-300'>
-				<h2 className='text-4xl font-bold'>{numCalls} calls</h2>
-				<p>Join us in making a difference</p>
+		<>
+			<div className='w-full h-[20vh] flex justify-evenly items-center'>
+				<Stats label='total calls' value={total} className='bg-orange-400' />
+				{Object.keys(stats).map((key) => (
+					<Stats
+						key={key}
+						label={key}
+						value={stats[key as keyof typeof stats]}
+					/>
+				))}
 			</div>
-			<h1>This is home page</h1>
-		</div>
+		</>
 	);
 };
 
