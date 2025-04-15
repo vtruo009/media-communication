@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { Card, CardContent } from './ui/card';
 import {
@@ -12,8 +12,9 @@ import {
 	SelectValue,
 } from './ui/select';
 import { Button } from '@/components/ui/button';
-import { BoardMember } from '@/lib/mixin';
-import { postCall, postUser, putCall } from '@/lib/database';
+import { BoardMember, CallMethod } from '@/lib/mixin';
+import { putCall } from '@/lib/database';
+import ActionWarningDialog from './ActionWarningDialog';
 
 enum CallOutcome {
 	SUCCESSFUL = 'successful',
@@ -35,17 +36,7 @@ const BoardMembers = ({
 	disableEmail: boolean;
 }) => {
 	const [district, setDistrict] = useState<number>();
-	const [userId, setUserId] = useState<string>('');
 	const [callId, setCallId] = useState<string>('');
-
-	useEffect(() => {
-		const storedUUID = document.cookie
-			.split('; ')
-			.find((row) => row.startsWith('user_uuid'))
-			?.split('=')[1];
-
-		if (storedUUID) setUserId(storedUUID);
-	}, []);
 
 	const selectItemList = () => {
 		const triggers = [];
@@ -57,22 +48,6 @@ const BoardMembers = ({
 			);
 		}
 		return triggers;
-	};
-
-	const handleClick = async (via: string) => {
-		try {
-			await postUser(userId);
-			const storedCallId: string = await postCall(
-				userId,
-				boardMembers[district! - 1].name,
-				via,
-				issueId
-			);
-			setCallId(storedCallId);
-			await postUser(userId);
-		} catch (error) {
-			console.error(error);
-		}
 	};
 
 	const updateCallOutcome = async (outcome: CallOutcome) => {
@@ -111,32 +86,31 @@ const BoardMembers = ({
 									<h4 className='text-2xl font-bold pt-2 lg:pt-0'>
 										{boardMembers[district - 1].name}
 									</h4>
-									<div className='pt-2'>
-										{disablePhone ? (
-											<p>You have made a prior call.</p>
-										) : (
-											<a
-												className='text-3xl text-blue-500 font-semibold underline lg:text-4xl'
-												href='tel:PHONE_NUM'
-												onClick={() => handleClick('phone')}
-											>
-												{boardMembers[district - 1].phone}
-											</a>
-										)}
-									</div>
-									<div className='pt-2'>
-										{disableEmail ? (
-											<p>You have sent the trustee an email.</p>
-										) : (
-											<a
-												className='text-xl lg:text-2xl'
-												href={`email:${boardMembers[district - 1].email}`}
-												onClick={() => handleClick('email')}
-											>
-												{boardMembers[district - 1].email}
-											</a>
-										)}
-									</div>
+									{disablePhone || callId != '' ? (
+										<p className='pt-2'>You have made a prior call.</p>
+									) : (
+										<ActionWarningDialog
+											method={CallMethod.PHONE}
+											contact={boardMembers[district! - 1].phone}
+											boardMemberName={boardMembers[district! - 1].name}
+											issueId={issueId}
+											setCallId={setCallId}
+										/>
+									)}
+									{disableEmail || callId != '' ? (
+										<p className='pt-2'>
+											The board member has received your email regarding this
+											issue.
+										</p>
+									) : (
+										<ActionWarningDialog
+											method={CallMethod.EMAIL}
+											contact={boardMembers[district! - 1].email}
+											boardMemberName={boardMembers[district! - 1].name}
+											issueId={issueId}
+											setCallId={setCallId}
+										/>
+									)}
 								</div>
 							</CardContent>
 						</Card>
@@ -150,7 +124,7 @@ const BoardMembers = ({
 									{Object.keys(CallOutcome).map((outcome) => (
 										<Button
 											key={CallOutcome[outcome as keyof typeof CallOutcome]}
-											className='bg-blue-300 w-[150px] hover:bg-blue-400 cursor-pointer'
+											className='bg-blue-300 w-[150px] hover:bg-blue-400 cursor-pointer focus-visible:ring-0'
 											onClick={() =>
 												updateCallOutcome(
 													CallOutcome[outcome as keyof typeof CallOutcome]
