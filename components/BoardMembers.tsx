@@ -57,6 +57,7 @@ const BoardMembers = ({
 
 	const handleClick = async (via: string) => {
 		try {
+			await postUser(userId);
 			const storedCallId: string = await postCall(
 				userId,
 				boardMembers[district! - 1].name,
