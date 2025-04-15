@@ -16,7 +16,7 @@ import { BoardMember } from '@/lib/mixin';
 import { postCall, postUser, putCall } from '@/lib/database';
 
 enum CallOutcome {
-	UNAVAILABLE = 'unavailable',
+	SUCCESSFUL = 'successful',
 	VOICEMAIL = 'voicemail',
 	EMAIL = 'email',
 }
@@ -143,7 +143,8 @@ const BoardMembers = ({
 						{callId && (
 							<div className='py-4'>
 								<div className='mb-4'>
-									Please share the result of your call:
+									Please share the result of your call to encourage others to
+									take action:
 								</div>
 								<div className='flex flex-col gap-4 md:flex-row'>
 									{Object.keys(CallOutcome).map((outcome) => (

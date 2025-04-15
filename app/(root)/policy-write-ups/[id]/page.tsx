@@ -11,16 +11,16 @@ import { cookies } from 'next/headers';
 
 const Overview = async ({ params }: { params: Promise<{ id: string }> }) => {
 	try {
-		const { id } = await params;
-		if (!id) return <h1>Loading...</h1>;
+		const { id: issueId } = await params;
+		if (!issueId) return <h1>Loading...</h1>;
 
 		const uuid = (await cookies()).get('user_uuid')?.value;
 		if (!uuid) return;
 
-		const writeup = await getWriteup(id);
+		const writeup = await getWriteup(issueId);
 		const boardMemberCount = await getBoardMemberCount();
 		const { num_calls: numCalls, num_emails: numEmails } =
-			await getUserActivities(uuid, id);
+			await getUserActivities(uuid, issueId);
 
 		return (
 			<article>
@@ -37,11 +37,11 @@ const Overview = async ({ params }: { params: Promise<{ id: string }> }) => {
 					</div>
 					<p className='py-4'>{writeup?.content}</p>
 					<BoardMembers
-						issueId={id}
+						issueId={issueId}
 						boardMemberCount={boardMemberCount}
 						boardMembers={(await getBoardMembers()) as BoardMember[]}
-						disablePhone={numCalls}
-						disableEmail={numEmails}
+						disablePhone={numCalls > 0}
+						disableEmail={numEmails > 0}
 					/>
 				</div>
 			</article>
