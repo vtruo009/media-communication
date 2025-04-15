@@ -4,17 +4,23 @@ import {
 	getBoardMembers,
 	getBoardMemberCount,
 	getWriteup,
+	getUserActivities,
 } from '@/lib/database';
 import { BoardMember } from '@/lib/mixin';
+import { cookies } from 'next/headers';
 
 const Overview = async ({ params }: { params: Promise<{ id: string }> }) => {
 	try {
 		const { id } = await params;
-
 		if (!id) return <h1>Loading...</h1>;
+
+		const uuid = (await cookies()).get('user_uuid')?.value;
+		if (!uuid) return;
 
 		const writeup = await getWriteup(id);
 		const boardMemberCount = await getBoardMemberCount();
+		const { num_calls: numCalls, num_emails: numEmails } =
+			await getUserActivities(uuid, id);
 
 		return (
 			<article>
@@ -34,6 +40,8 @@ const Overview = async ({ params }: { params: Promise<{ id: string }> }) => {
 						issueId={id}
 						boardMemberCount={boardMemberCount}
 						boardMembers={(await getBoardMembers()) as BoardMember[]}
+						disablePhone={numCalls}
+						disableEmail={numEmails}
 					/>
 				</div>
 			</article>

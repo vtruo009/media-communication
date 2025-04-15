@@ -25,10 +25,14 @@ const BoardMembers = ({
 	issueId,
 	boardMemberCount,
 	boardMembers,
+	disablePhone,
+	disableEmail,
 }: {
 	issueId: string;
 	boardMemberCount: number;
 	boardMembers: BoardMember[];
+	disablePhone: boolean;
+	disableEmail: boolean;
 }) => {
 	const [district, setDistrict] = useState<number>();
 	const [userId, setUserId] = useState<string>('');
@@ -108,22 +112,30 @@ const BoardMembers = ({
 										{boardMembers[district - 1].name}
 									</h4>
 									<div className='pt-2'>
-										<a
-											className='text-3xl text-blue-500 font-semibold underline lg:text-4xl'
-											href='tel:PHONE_NUM'
-											onClick={() => handleClick('phone')}
-										>
-											{boardMembers[district - 1].phone}
-										</a>
+										{disablePhone ? (
+											<p>You have made a prior call.</p>
+										) : (
+											<a
+												className='text-3xl text-blue-500 font-semibold underline lg:text-4xl'
+												href='tel:PHONE_NUM'
+												onClick={() => handleClick('phone')}
+											>
+												{boardMembers[district - 1].phone}
+											</a>
+										)}
 									</div>
 									<div className='pt-2'>
-										<a
-											className='text-xl lg:text-2xl'
-											href={`email:${boardMembers[district - 1].email}`}
-											onClick={() => handleClick('email')}
-										>
-											{boardMembers[district - 1].email}
-										</a>
+										{disableEmail ? (
+											<p>You have sent the trustee an email.</p>
+										) : (
+											<a
+												className='text-xl lg:text-2xl'
+												href={`email:${boardMembers[district - 1].email}`}
+												onClick={() => handleClick('email')}
+											>
+												{boardMembers[district - 1].email}
+											</a>
+										)}
 									</div>
 								</div>
 							</CardContent>
