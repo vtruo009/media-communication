@@ -197,10 +197,12 @@ export const putCall = async (callId: string, outcome: string) => {
 
 export const getAllCalls = async () => {
 	try {
-		return await sql`
-			SELECT * FROM calls
-			WHERE outcome != NULL
+		const result = await sql`
+			SELECT COUNT(*) FROM calls
+			WHERE outcome IS NOT NULL
 		`;
+
+		return Number(result[0].count);
 	} catch (error) {
 		throw new Error(`Error getting all calls: ${error}`);
 	}
@@ -221,5 +223,22 @@ export const getCallsForUser = async (userId: string) => {
 		throw new Error(
 			`Error getting the calls for user with uuid ${userId}: ${error}`
 		);
+	}
+};
+
+export const getCallStats = async () => {
+	try {
+		const result = await sql`
+			SELECT
+				COUNT(*) AS total,
+				SUM(CASE WHEN outcome = 'success' THEN 1 ELSE 0 END) AS successes,
+				SUM(CASE WHEN outcome = 'voicemail' THEN 1 ELSE 0 END) AS voicemails,
+				SUM(CASE WHEN outcome = 'email' THEN 1 ELSE 0 END) AS emails
+			FROM calls;
+		`;
+
+		return { ...result[0] };
+	} catch (error) {
+		throw new Error(`Error getting the stats for calls: ${error}`);
 	}
 };
