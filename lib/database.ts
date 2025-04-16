@@ -223,3 +223,21 @@ export const getCallsForUser = async (userId: string) => {
 		);
 	}
 };
+
+export const getUserActivities = async (callerId: string, issueId: string) => {
+	try {
+		const result = await sql`
+			SELECT
+				SUM(CASE WHEN via = 'phone' THEN 1 ELSE 0 END) AS num_calls,
+				SUM(CASE WHEN via = 'email' THEN 1 ELSE 0 END) AS num_emails
+			FROM calls
+			WHERE
+				caller_id = ${callerId} and
+				issue_id = ${issueId};
+		`;
+
+		return { ...result[0] };
+	} catch (error) {
+		throw new Error(`Error getting user activities: ${error}`);
+	}
+};

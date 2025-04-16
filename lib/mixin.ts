@@ -18,3 +18,8 @@ export interface BoardMember {
 	district: number;
 	image_url: string;
 }
+
+export enum CallMethod {
+	PHONE = 'phone',
+	EMAIL = 'email',
+}
