@@ -57,9 +57,9 @@ const ActionWarningDialog = ({
 			await postUser(userId);
 			window.location.href = href;
 			setDialogOpen(false);
-			method === CallMethod.PHONE
-				? setDisablePhone(true)
-				: setDisableEmail(true);
+
+			if (method === CallMethod.PHONE) setDisablePhone(true);
+			else setDisableEmail(true);
 		} catch (error) {
 			console.error(error);
 		}
