@@ -11,35 +11,32 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from './ui/button';
 import { postCall, postUser } from '@/lib/database';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
+import { CallMethod } from '@/lib/mixin';
 
 interface ActionWarningDialogProps {
+	userId: string;
 	method: string;
 	contact: string;
 	boardMemberName: string;
 	issueId: string;
 	setCallId: Dispatch<SetStateAction<string>>;
+	setDisablePhone: Dispatch<SetStateAction<boolean>>;
+	setDisableEmail: Dispatch<SetStateAction<boolean>>;
 }
 
 const ActionWarningDialog = ({
+	userId,
 	method,
 	contact,
 	boardMemberName,
 	issueId,
 	setCallId,
+	setDisablePhone,
+	setDisableEmail,
 }: ActionWarningDialogProps) => {
-	const [userId, setUserId] = useState<string>('');
 	const [href, setHref] = useState<string>('');
 	const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-
-	useEffect(() => {
-		const storedUUID = document.cookie
-			.split('; ')
-			.find((row) => row.startsWith('user_uuid'))
-			?.split('=')[1];
-
-		if (storedUUID) setUserId(storedUUID);
-	}, []);
 
 	const handleClick = (e: React.MouseEvent) => {
 		e.preventDefault();
@@ -60,6 +57,9 @@ const ActionWarningDialog = ({
 			await postUser(userId);
 			window.location.href = href;
 			setDialogOpen(false);
+			method === CallMethod.PHONE
+				? setDisablePhone(true)
+				: setDisableEmail(true);
 		} catch (error) {
 			console.error(error);
 		}

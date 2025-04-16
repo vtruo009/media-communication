@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Card, CardContent } from './ui/card';
 import {
@@ -13,7 +13,7 @@ import {
 } from './ui/select';
 import { Button } from '@/components/ui/button';
 import { BoardMember, CallMethod } from '@/lib/mixin';
-import { putCall } from '@/lib/database';
+import { getUserActivities, putCall } from '@/lib/database';
 import ActionWarningDialog from './ActionWarningDialog';
 
 enum CallOutcome {
@@ -26,17 +26,33 @@ const BoardMembers = ({
 	issueId,
 	boardMemberCount,
 	boardMembers,
-	disablePhone,
-	disableEmail,
 }: {
 	issueId: string;
 	boardMemberCount: number;
 	boardMembers: BoardMember[];
-	disablePhone: boolean;
-	disableEmail: boolean;
 }) => {
+	const [userId, setUserId] = useState<string>('');
 	const [district, setDistrict] = useState<number>();
 	const [callId, setCallId] = useState<string>('');
+	const [disablePhone, setDisablePhone] = useState<boolean>(false);
+	const [disableEmail, setDisableEmail] = useState<boolean>(false);
+
+	useEffect(() => {
+		(async () => {
+			const storedUUID = document.cookie
+				.split('; ')
+				.find((row) => row.startsWith('user_uuid'))
+				?.split('=')[1];
+
+			if (storedUUID) {
+				setUserId(storedUUID);
+				const { num_calls: numCalls, num_emails: numEmails } =
+					await getUserActivities(storedUUID, issueId);
+				setDisablePhone(numCalls > 0);
+				setDisableEmail(numEmails > 0);
+			}
+		})();
+	}, []);
 
 	const selectItemList = () => {
 		const triggers = [];
@@ -86,29 +102,35 @@ const BoardMembers = ({
 									<h4 className='text-2xl font-bold pt-2 lg:pt-0'>
 										{boardMembers[district - 1].name}
 									</h4>
-									{disablePhone || callId != '' ? (
+									{disablePhone ? (
 										<p className='pt-2'>You have made a prior call.</p>
 									) : (
 										<ActionWarningDialog
+											userId={userId}
 											method={CallMethod.PHONE}
 											contact={boardMembers[district! - 1].phone}
 											boardMemberName={boardMembers[district! - 1].name}
 											issueId={issueId}
 											setCallId={setCallId}
+											setDisablePhone={setDisablePhone}
+											setDisableEmail={setDisableEmail}
 										/>
 									)}
-									{disableEmail || callId != '' ? (
+									{disableEmail ? (
 										<p className='pt-2'>
 											The board member has received your email regarding this
 											issue.
 										</p>
 									) : (
 										<ActionWarningDialog
+											userId={userId}
 											method={CallMethod.EMAIL}
 											contact={boardMembers[district! - 1].email}
 											boardMemberName={boardMembers[district! - 1].name}
 											issueId={issueId}
 											setCallId={setCallId}
+											setDisablePhone={setDisablePhone}
+											setDisableEmail={setDisableEmail}
 										/>
 									)}
 								</div>
