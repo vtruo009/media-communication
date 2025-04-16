@@ -5,11 +5,10 @@ import { BoardMember } from '@/lib/mixin';
 
 const Overview = async ({ params }: { params: Promise<{ id: string }> }) => {
 	try {
-		const { id } = await params;
+		const { id: issueId } = await params;
+		if (!issueId) return <h1>Loading...</h1>;
 
-		if (!id) return <h1>Loading...</h1>;
-
-		const video = await getVideo(id);
+		const video = await getVideo(issueId);
 		const boardMemberCount = await getBoardMemberCount();
 
 		return (
@@ -27,7 +26,7 @@ const Overview = async ({ params }: { params: Promise<{ id: string }> }) => {
 					</div>
 					<p className='py-4'>{video?.content}</p>
 					<BoardMembers
-						issueId={id}
+						issueId={issueId}
 						boardMemberCount={boardMemberCount}
 						boardMembers={(await getBoardMembers()) as BoardMember[]}
 					/>
