@@ -71,7 +71,7 @@ const ActionWarningDialog = ({
 				<div className='pt-2'>
 					<a
 						className='text-xl lg:text-2xl'
-						href={`${method === 'email' ? 'mailto' : 'phone'}:`}
+						href={`${method === 'email' ? 'mailto' : 'tel'}:`}
 						onClick={handleClick}
 					>
 						{contact}
