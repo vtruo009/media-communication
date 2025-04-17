@@ -39,13 +39,16 @@ const Footer = () => {
 		<footer className='w-full h-screen flex flex-col justify-evenly items-start border-t-2 px-6 md:max-lg:md:grid md:h-fit md:max-lg:grid-cols-2 md:py-6 lg:flex-row lg:py-8'>
 			<div>
 				<h2 className='text-lg font-bold'>BRAND NAME</h2>
-				<a className='my-4' href='mailto:media@communications.com'>
+				<a className='inline-block py-1' href='mailto:media@communications.com'>
 					media@communications.com
 				</a>
 				<br />
-				<a href='tel:+16266008544'>(123)-123-1234</a>
+				<a className='inline-block py-1' href='tel:+16266008544'>
+					(123) - 123-1234
+				</a>
 				<br />
 				<a
+					className='inline-block py-1'
 					href='https://maps.google.com/maps?q=8972 Heritage Avenue Rocklin CA 95677'
 					target='_blank'
 				>
