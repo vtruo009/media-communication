@@ -1,4 +1,5 @@
 import Instruction from '@/components/Instruction';
+import TakeAction from '@/components/TakeAction';
 import { SearchCheck, MapPinned, PhoneCall } from 'lucide-react';
 
 const GettingStarted = () => {
@@ -30,6 +31,7 @@ const GettingStarted = () => {
 					instruction={instruction.text}
 				/>
 			))}
+			<TakeAction message='Ready to get started?' />
 		</div>
 	);
 };
