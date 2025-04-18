@@ -1,23 +1,28 @@
 import TakeAction from '@/components/TakeAction';
-import { SearchCheck, MapPinned, PhoneCall } from 'lucide-react';
 import {
 	Accordion,
 	AccordionContent,
 	AccordionItem,
 	AccordionTrigger,
 } from '@/components/ui/accordion';
-import { ReactElement } from 'react';
+import { INSTRUCTIONS } from '@/lib/constants';
+import { DynamicIcon } from 'lucide-react/dynamic';
+import dynamicIconImports from 'lucide-react/dynamicIconImports';
 
 interface InstructionProps {
 	label: string;
-	icon: ReactElement;
+	iconName: string;
 	instruction: string;
 }
 
-const Instruction = ({ label, icon, instruction }: InstructionProps) => {
+const Instruction = ({ label, iconName, instruction }: InstructionProps) => {
 	return (
-		<div className='flex flex-col items-center px-6 py-8 lg:flex-row lg:gap-x-14 lg:items-start'>
-			<div className='pb-5'>{icon}</div>
+		<div className='flex flex-col items-center px-6 py-8 md:px-40 lg:flex-row lg:gap-x-14 lg:items-start xl:px-96'>
+			<DynamicIcon
+				name={iconName as keyof typeof dynamicIconImports}
+				size={96}
+				className='w-24 stroke-2 stroke-orange-300'
+			/>
 			<div className='w-fit'>
 				<p className='text-center text-xl font-bold pb-5 lg:text-3xl lg:text-start'>
 					{label}
@@ -67,32 +72,13 @@ const FAQ = () => {
 };
 
 const GettingStarted = () => {
-	// TODO: Move to constants.ts
-	const instructions = [
-		{
-			label: 'Choose an issue you care about',
-			icon: <SearchCheck className='instruction-icon' />,
-			text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ut erat neque. Duis id sapien a lorem consectetur porta id in quam. Nulla quis commodo lorem. Donec enim nisl, tempor quis luctus a, condimentum in nisl. Cras maximus erat id velit congue facilisis. Integer et nulla vel tellus laoreet fringilla.',
-		},
-		{
-			label: 'Enter your location',
-			icon: <MapPinned className='instruction-icon' />,
-			text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ut erat neque. Duis id sapien a lorem consectetur porta id in quam. Nulla quis commodo lorem. Donec enim nisl, tempor quis luctus a, condimentum in nisl. Cras maximus erat id velit congue facilisis. Integer et nulla vel tellus laoreet fringilla.',
-		},
-		{
-			label: 'Make your call',
-			icon: <PhoneCall className='instruction-icon' />,
-			text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ut erat neque. Duis id sapien a lorem consectetur porta id in quam. Nulla quis commodo lorem. Donec enim nisl, tempor quis luctus a, condimentum in nisl. Cras maximus erat id velit congue facilisis. Integer et nulla vel tellus laoreet fringilla.',
-		},
-	];
-
 	return (
-		<div className='hit-fit flex flex-col items-center lg:px-60'>
-			{instructions.map((instruction) => (
+		<div className='flex flex-col items-center'>
+			{INSTRUCTIONS.map((instruction) => (
 				<Instruction
 					key={instruction.label}
 					label={instruction.label}
-					icon={instruction.icon}
+					iconName={instruction.icon}
 					instruction={instruction.text}
 				/>
 			))}
