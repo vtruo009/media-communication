@@ -1,25 +1,11 @@
 import BoardMembers from '@/components/BoardMembers';
+import Categories from '@/components/Categories';
 import {
 	getBoardMembers,
 	getBoardMemberCount,
 	getWriteup,
 } from '@/lib/database';
 import { BoardMember } from '@/lib/mixin';
-
-const Categories = ({ categories }: { categories: string[] }) => {
-	return (
-		<>
-			{categories.map((category, i) => (
-				<span key={category}>
-					<span className='text-xs font-bold uppercase text-blue-900 p-2'>
-						{category}
-					</span>
-					{i !== categories.length - 1 && <span>|</span>}
-				</span>
-			))}
-		</>
-	);
-};
 
 const Overview = async ({ params }: { params: Promise<{ id: string }> }) => {
 	try {
