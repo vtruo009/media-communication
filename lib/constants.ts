@@ -16,6 +16,23 @@ export const INSTRUCTIONS = [
 	},
 ];
 
+export const FAQS = [
+	{
+		question: 'What is the purpose of this website?',
+		answer:
+			'To provide a platform for users who would like to make a difference in the PUSD.',
+	},
+	{
+		question: 'How long do I have for each call?',
+		answer: 'Keep it short. A call can be under a minute.',
+	},
+	{
+		question: 'What do I say?',
+		answer:
+			'We provide a script on the overview page. Stick to the script or feel free to improvise!',
+	},
+];
+
 export const FOOTER_LINKS: {
 	[key: string]: { url: string; display: string }[];
 } = {
