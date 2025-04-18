@@ -1,30 +1,14 @@
 import React from 'react';
 import EmailSubscription from './EmailSubscription';
 import Link from 'next/link';
+import { FOOTER_LINKS } from '@/lib/constants';
 
 const Section = ({ label }: { label: string }) => {
-	const allLinks: { [key: string]: { url: string; display: string }[] } = {
-		community: [
-			{
-				url: '',
-				display: `display name`,
-			},
-			{
-				url: '',
-				display: `display name`,
-			},
-			{
-				url: '',
-				display: `display name`,
-			},
-		],
-	};
-
 	return (
 		<div className='md:max-lg:row-span-1 md:max-lg:p-4'>
 			<h4 className='text-lg font-bold text-gray-500 capitalize'>{label}</h4>
 			<ul>
-				{allLinks[label].map((link, i) => (
+				{FOOTER_LINKS[label].map((link, i) => (
 					<li key={`${label}-${i}`}>
 						<Link href={link.url}>{`${link.display}-${i}`}</Link>
 					</li>

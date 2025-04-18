@@ -10,13 +10,6 @@
 	--font-geist-mono: 'Geist Mono', monospace;
 }
 
-.instruction-icon {
-	width: 6rem;
-	height: auto;
-	stroke: #4ea5d9;
-	stroke-width: 2px;
-}
-
 .write-up-icon {
 	width: 2rem;
 	height: auto;
