@@ -11,10 +11,16 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from './ui/select';
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { BoardMember, CallMethod } from '@/lib/mixin';
 import { getUserActivities, putCall } from '@/lib/database';
 import ActionWarningDialog from './ActionWarningDialog';
+import { Info } from 'lucide-react';
 
 enum CallOutcome {
 	SUCCESSFUL = 'successful',
@@ -76,14 +82,32 @@ const BoardMembers = ({
 
 	return (
 		<>
-			<Select onValueChange={(e) => setDistrict(Number(e))}>
-				<SelectTrigger className='border-2 focus-visible:ring-0 font-semibold'>
-					<SelectValue placeholder='Select your district' />
-				</SelectTrigger>
-				<SelectContent className='bg-sea-salt border-2'>
-					<SelectGroup>{selectItemList()}</SelectGroup>
-				</SelectContent>
-			</Select>
+			<div className='inline-flex items-center gap-x-2'>
+				<Select onValueChange={(e) => setDistrict(Number(e))}>
+					<SelectTrigger className='border-2 focus-visible:ring-0 font-semibold'>
+						<SelectValue placeholder='Select district' />
+					</SelectTrigger>
+					<SelectContent className='bg-sea-salt border-2'>
+						<SelectGroup>{selectItemList()}</SelectGroup>
+					</SelectContent>
+				</Select>
+				<Popover>
+					<PopoverTrigger>
+						<Info className='w-4 h-4' />
+					</PopoverTrigger>
+					<PopoverContent className='text-center text-xs italic bg-gray-200 rounded-lg border-0'>
+						Image and contact info sourced from{' '}
+						<a
+							href='https://www.pusd.us/about/board-of-education/board-members'
+							target='_blank'
+							rel='noopener noreferrer'
+							className='underline text-blue-500'
+						>
+							PUSD official website
+						</a>
+					</PopoverContent>
+				</Popover>
+			</div>
 			<div className='py-6'>
 				{district && (
 					<>
@@ -98,7 +122,7 @@ const BoardMembers = ({
 										alt='picture of board member'
 									/>
 								</div>
-								<div className='text-center lg:w-2/3 lg:pl-8 lg:text-start'>
+								<div className='w-full text-center lg:w-2/3 lg:pl-8 lg:text-start'>
 									<h4 className='text-2xl font-bold pt-2 lg:pt-0'>
 										{boardMembers[district - 1].name}
 									</h4>
