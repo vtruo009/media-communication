@@ -11,9 +11,16 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from './ui/select';
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
-import { BoardMember } from '@/lib/mixin';
-import { postCall, postUser, putCall } from '@/lib/database';
+import { BoardMember, CallMethod } from '@/lib/mixin';
+import { getUserActivities, putCall } from '@/lib/database';
+import ActionWarningDialog from './ActionWarningDialog';
+import { Info } from 'lucide-react';
 
 enum CallOutcome {
 	SUCCESSFUL = 'successful',
@@ -30,17 +37,27 @@ const BoardMembers = ({
 	boardMemberCount: number;
 	boardMembers: BoardMember[];
 }) => {
-	const [district, setDistrict] = useState<number>();
 	const [userId, setUserId] = useState<string>('');
+	const [district, setDistrict] = useState<number>();
 	const [callId, setCallId] = useState<string>('');
+	const [disablePhone, setDisablePhone] = useState<boolean>(false);
+	const [disableEmail, setDisableEmail] = useState<boolean>(false);
 
 	useEffect(() => {
-		const storedUUID = document.cookie
-			.split('; ')
-			.find((row) => row.startsWith('user_uuid'))
-			?.split('=')[1];
+		(async () => {
+			const storedUUID = document.cookie
+				.split('; ')
+				.find((row) => row.startsWith('user_uuid'))
+				?.split('=')[1];
 
-		if (storedUUID) setUserId(storedUUID);
+			if (storedUUID) {
+				setUserId(storedUUID);
+				const { num_calls: numCalls, num_emails: numEmails } =
+					await getUserActivities(storedUUID, issueId);
+				setDisablePhone(numCalls > 0);
+				setDisableEmail(numEmails > 0);
+			}
+		})();
 	}, []);
 
 	const selectItemList = () => {
@@ -55,21 +72,6 @@ const BoardMembers = ({
 		return triggers;
 	};
 
-	const handleClick = async (via: string) => {
-		try {
-			const storedCallId: string = await postCall(
-				userId,
-				boardMembers[district! - 1].name,
-				via,
-				issueId
-			);
-			setCallId(storedCallId);
-			await postUser(userId);
-		} catch (error) {
-			console.error(error);
-		}
-	};
-
 	const updateCallOutcome = async (outcome: CallOutcome) => {
 		try {
 			await putCall(callId, outcome);
@@ -80,14 +82,32 @@ const BoardMembers = ({
 
 	return (
 		<>
-			<Select onValueChange={(e) => setDistrict(Number(e))}>
-				<SelectTrigger className='border-2 focus-visible:ring-0 font-semibold'>
-					<SelectValue placeholder='Select your district' />
-				</SelectTrigger>
-				<SelectContent className='bg-sea-salt border-2'>
-					<SelectGroup>{selectItemList()}</SelectGroup>
-				</SelectContent>
-			</Select>
+			<div className='inline-flex items-center gap-x-2'>
+				<Select onValueChange={(e) => setDistrict(Number(e))}>
+					<SelectTrigger className='border-2 focus-visible:ring-0 font-semibold'>
+						<SelectValue placeholder='Select district' />
+					</SelectTrigger>
+					<SelectContent className='bg-sea-salt border-2'>
+						<SelectGroup>{selectItemList()}</SelectGroup>
+					</SelectContent>
+				</Select>
+				<Popover>
+					<PopoverTrigger>
+						<Info className='w-4 h-4' />
+					</PopoverTrigger>
+					<PopoverContent className='text-center text-xs italic bg-gray-200 rounded-lg border-0'>
+						Image and contact info sourced from{' '}
+						<a
+							href='https://www.pusd.us/about/board-of-education/board-members'
+							target='_blank'
+							rel='noopener noreferrer'
+							className='underline text-blue-500'
+						>
+							PUSD official website
+						</a>
+					</PopoverContent>
+				</Popover>
+			</div>
 			<div className='py-6'>
 				{district && (
 					<>
@@ -102,41 +122,55 @@ const BoardMembers = ({
 										alt='picture of board member'
 									/>
 								</div>
-								<div className='text-center lg:w-2/3 lg:pl-8 lg:text-start'>
+								<div className='w-full text-center lg:w-2/3 lg:pl-8 lg:text-start'>
 									<h4 className='text-2xl font-bold pt-2 lg:pt-0'>
 										{boardMembers[district - 1].name}
 									</h4>
-									<div className='pt-2'>
-										<a
-											className='text-3xl text-blue-500 font-semibold underline lg:text-4xl'
-											href='tel:PHONE_NUM'
-											onClick={() => handleClick('phone')}
-										>
-											{boardMembers[district - 1].phone}
-										</a>
-									</div>
-									<div className='pt-2'>
-										<a
-											className='text-xl lg:text-2xl'
-											href={`email:${boardMembers[district - 1].email}`}
-											onClick={() => handleClick('email')}
-										>
-											{boardMembers[district - 1].email}
-										</a>
-									</div>
+									{disablePhone ? (
+										<p className='pt-2'>You have made a prior call.</p>
+									) : (
+										<ActionWarningDialog
+											userId={userId}
+											method={CallMethod.PHONE}
+											contact={boardMembers[district! - 1].phone}
+											boardMemberName={boardMembers[district! - 1].name}
+											issueId={issueId}
+											setCallId={setCallId}
+											setDisablePhone={setDisablePhone}
+											setDisableEmail={setDisableEmail}
+										/>
+									)}
+									{disableEmail ? (
+										<p className='pt-2'>
+											The board member has received your email regarding this
+											issue.
+										</p>
+									) : (
+										<ActionWarningDialog
+											userId={userId}
+											method={CallMethod.EMAIL}
+											contact={boardMembers[district! - 1].email}
+											boardMemberName={boardMembers[district! - 1].name}
+											issueId={issueId}
+											setCallId={setCallId}
+											setDisablePhone={setDisablePhone}
+											setDisableEmail={setDisableEmail}
+										/>
+									)}
 								</div>
 							</CardContent>
 						</Card>
 						{callId && (
 							<div className='py-4'>
 								<div className='mb-4'>
-									Please share the result of your call:
+									Please share the result of your call to encourage others to
+									take action:
 								</div>
 								<div className='flex flex-col gap-4 md:flex-row'>
 									{Object.keys(CallOutcome).map((outcome) => (
 										<Button
 											key={CallOutcome[outcome as keyof typeof CallOutcome]}
-											className='bg-blue-300 w-[150px] hover:bg-blue-400 cursor-pointer'
+											className='bg-blue-300 w-[150px] hover:bg-blue-400 cursor-pointer focus-visible:ring-0'
 											onClick={() =>
 												updateCallOutcome(
 													CallOutcome[outcome as keyof typeof CallOutcome]
